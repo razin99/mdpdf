@@ -1,31 +1,8 @@
-import ora from 'ora';
-import { exec } from 'child_process';
+import execa from 'execa';
+import Listr from 'listr';
 
-const spinnerMsg = "Compiling...";
-const spinner = ora({
-  text: spinnerMsg,
-  spinner: "dots3",
-})
-
-/**
- * Made the spinner actually spin, thanks to this:
- * https://github.com/sindresorhus/ora/issues/86#issuecomment-471454758
- */
-
-function compile() {
-  return new Promise((resolve, reject) => {
-    exec("tsc").on('close', code => {
-      if (code === 0) resolve();
-      else reject();
-    })
-  })
-}
-
-async function run() {
-  spinner.start();
-  await compile();
-  spinner.stop();
-}
-
-run();
-
+const tasks = new Listr([{
+  title: 'Compiling to Javascript',
+  task: () => execa("tsc")
+}])
+tasks.run().catch((e) => console.log(e))

@@ -21,7 +21,9 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "execa": "^5.1.1",
     "gray-matter": "^4.0.3",
+    "listr": "^0.14.3",
     "md-to-pdf": "^4.0.0",
     "ora": "^5.4.1",
     "remark": "^14.0.1",
