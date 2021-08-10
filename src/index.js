@@ -16,7 +16,7 @@ const args = yargs(hideBin(process.argv)).options({
   'out': { type: 'string', demandOption: false, alias: 'o', describe: outMsg },
 }).parseSync();
 
-const fileOut = args.out ? args.out : args.in.replace('.md', '') + '.pdf';
+const fileOut = args.out || args.in.replace('.md', '') + '.pdf';
 
 if (!fs.existsSync(args['in'])) {
   const err = new Error("Unable to open file: " + args['in']);
