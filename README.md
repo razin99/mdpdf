@@ -5,6 +5,15 @@ Generate pdf from markdown and include table of contents.
 Uses `remark-toc` to generate toc and `md-to-pdf` to generate pdf.The
 css styles are from github markdown.
 
+## Installation
+```console
+$ git clone 'https://github.com/razin99/mdpdf.git'
+$ cd mdpdf
+$ npm -g install
+# may need sudo
+```
+I don't feel like uploading this to npm, lmao.
+
 ## Why this exists?
 
 Initially, I just wanted to make a simple script that uses `remark-toc` and
