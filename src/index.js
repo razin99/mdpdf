@@ -26,7 +26,12 @@ if (!fs.existsSync(args['in'])) {
   throw err;
 }
 
-const spinner = ora(`Converting ${args['in']} to pdf`).start();
+const spinnerMsg = `Converting ${args['in']} to pdf`
+const spinner = ora({
+  text: spinnerMsg,
+  spinner: "dots3",
+  indent: 4,
+}).start();
 
 generatePdf(args.in, fileOut)
   .then(() => { process.exitCode = 0; })
