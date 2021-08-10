@@ -8,9 +8,12 @@ import { generatePdf } from './convert.js';
 import ora from 'ora';
 import { ENOENT } from 'constants';
 
+const outMsg = "Output file path";
+const inMsg = "Path to input file";
+
 const args = yargs(hideBin(process.argv)).options({
-  'in': { type: 'string', demandOption: true, alias: 'i' },
-  'out': { type: 'string', demandOption: false, alias: 'o' },
+  'in': { type: 'string', demandOption: true, alias: 'i', describe: inMsg },
+  'out': { type: 'string', demandOption: false, alias: 'o', describe: outMsg },
 }).parseSync();
 
 const fileOut = args.out ? args.out : args.in.replace('.md', '') + '.pdf';
