@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": { "md-pdf": "./src/index.js" },
+  "bin": { "mdpdf": "./src/index.js" },
   "keywords": [],
   "author": "",
   "license": "ISC",
