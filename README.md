@@ -9,6 +9,8 @@ css styles are from github markdown.
 ```console
 $ git clone 'https://github.com/razin99/mdpdf.git'
 $ cd mdpdf
+$ npm run build
+# compile typescript files
 $ npm -g install
 # may need sudo
 ```
@@ -39,10 +41,10 @@ Need the extra `#` so that `remark-toc` stops there. Only useful if you
 need to insert page break after toc.
 
 ## Future plans
-* Use something like `chokidar` to do some sort of live preview and make it a
-  vscode plugin.
-* Find better way to insert page break after toc.
-* Make CLI accept more flags to change config of `md-to-pdf`
-* Migrate to Typescript
+- [ ]  Use something like `chokidar` to do some sort of live preview and make
+  it a vscode plugin.
+- [ ]  Find better way to insert page break after toc.
+- [ ]  Make CLI accept more flags to change config of `md-to-pdf`
+- [x]  Migrate to Typescript
 
 
