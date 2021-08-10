@@ -1,29 +1,42 @@
 #!/usr/bin/env node
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import fs from 'fs';
 import { generatePdf } from './convert.js';
-import { ENOENT } from 'constants';
-import { exit } from 'process';
+import path from 'path';
+import fs from 'fs';
 import Listr from 'listr';
-const inMsg = "Path to input file";
-const outMsg = "Output file path";
+const parentMsg = 'no error if existing, make parent directories as neededs';
 const args = yargs(hideBin(process.argv)).options({
-    'in': { type: 'string', demandOption: true, alias: 'i', describe: inMsg },
-    'out': { type: 'string', demandOption: false, alias: 'o', describe: outMsg },
+    'outdir': { type: 'string', demandOption: false },
+    'parent': { type: 'boolean', demandOption: false, alias: 'p', describe: parentMsg }
 }).parseSync();
-const fileOut = args['out'] || args['in'].replace('.md', '') + '.pdf';
-if (!fs.existsSync(args['in'])) {
-    console.log("Unable to open file: " + args['in']);
-    exit(ENOENT);
+const outdir = args.outdir || '';
+if (args.outdir && args.parent) {
+    !fs.existsSync(args.outdir) && fs.mkdirSync(args.outdir, { recursive: true });
 }
-const spinnerMsg = `Converting ${args['in']} to pdf`;
+const files = [...new Set(args._)].map(e => e.toString());
+function convToPath(file) {
+    // '/tmp/someFolder' + 'fileName'
+    // './somefolder/anotherSubfolder' + 'filename'
+    const baseFileName = `${path.basename(file).replace('.md', '')}.pdf`;
+    return path.join(outdir, baseFileName);
+}
 async function main() {
-    await new Listr([
-        {
-            title: spinnerMsg,
-            task: async () => generatePdf(args['in'], fileOut)
-        }
-    ]).run();
+    await new Listr(files.map((file) => {
+        return ({
+            title: `Converting ${file} to pdf`,
+            task: async () => {
+                if (args.outdir)
+                    await generatePdf(file, convToPath(file));
+                else
+                    await generatePdf(file, `${file.replace('.md', '')}.pdf`);
+            }
+        });
+    }), {
+        concurrent: true,
+        exitOnError: false
+    })
+        .run()
+        .catch((error) => { throw error; });
 }
 main().catch(e => console.log(e));

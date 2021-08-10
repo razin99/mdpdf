@@ -41,9 +41,8 @@ export async function generatePdf(filePath, outFilePath) {
     try {
         fileContent = fs.readFileSync(filePath, 'utf8');
     }
-    catch {
-        console.log("Unable to open file: " + filePath);
-        return;
+    catch (error) {
+        throw error;
     }
     const withToc = await remark()
         .use(remarkToc)
