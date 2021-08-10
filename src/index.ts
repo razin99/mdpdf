@@ -3,9 +3,9 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import fs from 'fs';
 import { generatePdf } from './convert.js';
-import ora from 'ora';
 import { ENOENT } from 'constants';
 import { exit } from 'process';
+import Listr from 'listr';
 
 const inMsg: string = "Path to input file";
 const outMsg: string = "Output file path";
@@ -23,21 +23,13 @@ if (!fs.existsSync(args['in'])) {
 }
 
 const spinnerMsg: string = `Converting ${args['in']} to pdf`
-const spinner = ora({
-  text: spinnerMsg,
-  spinner: "dots3",
-  indent: 4,
-}).start();
-
-generatePdf(args['in'], fileOut)
-  .then(() => { process.exitCode = 0; })
-  .catch((err) => {
-    console.log("Exiting due to: ");
-    console.log(err);
-    process.exitCode = err.code;
-  })
-  .finally(() => {
-    spinner.stop();
-    process.exit()
-  })
+async function main() {
+  await new Listr([
+    {
+      title: spinnerMsg,
+      task: async () => generatePdf(args['in'], fileOut)
+    }
+  ]).run();
+}
+main().catch(e => console.log(e));
 
