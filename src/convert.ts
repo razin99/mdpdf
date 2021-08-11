@@ -5,6 +5,7 @@ import { dirname } from 'path';
 import remarkToc from 'remark-toc';
 import fs from 'fs';
 import { PdfConfig } from 'md-to-pdf/dist/lib/config'
+import { appendBreakPostTOC } from './appendBreakPostTOC.js'
 
 /**
  * CSS for the markdown
@@ -55,7 +56,13 @@ export async function generatePdf(filePath: string, outFilePath: string) {
     .process(fileContent)
     .then(f => String(f))
 
-  const pdf = await mdToPdf({ content: withToc }, configMdToPdf)
+  // if markdown has toc, add page break
+  const content: string =
+    /table of contents/i.test(withToc)
+    ?  appendBreakPostTOC(withToc)
+    : withToc;
+
+  const pdf = await mdToPdf({ content: content }, configMdToPdf)
     .catch((e) => {
       console.log(e);
       console.log(`file path provided: ${filePath}`)
