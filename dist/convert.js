@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import remarkToc from 'remark-toc';
 import fs from 'fs';
-import { appendBreakPostTOC } from './appendBreakPostTOC.js';
+import { addPageBreak } from './appendBreakPostTOC.js';
 /**
  * CSS for the markdown
  */
@@ -47,13 +47,10 @@ export async function generatePdf(filePath, outFilePath) {
     }
     const withToc = await remark()
         .use(remarkToc)
+        .use(addPageBreak)
         .process(fileContent)
         .then(f => String(f));
-    // if markdown has toc, add page break
-    const content = /table of contents/i.test(withToc)
-        ? appendBreakPostTOC(withToc)
-        : withToc;
-    const pdf = await mdToPdf({ content: content }, configMdToPdf)
+    const pdf = await mdToPdf({ content: withToc }, configMdToPdf)
         .catch((e) => {
         console.log(e);
         console.log(`file path provided: ${filePath}`);
