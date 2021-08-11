@@ -61,7 +61,7 @@ need to insert page break after toc.
 ## Future plans
 - [ ] Use something like `chokidar` to do some sort of live preview and make
   it a vscode plugin.
-- [ ] Find better way to insert page break after toc.
+- [x] Find better way to insert page break after toc. (sort of)
 - [ ] Make CLI accept more flags to change config of `md-to-pdf`
 - [x] Migrate to Typescript
 - [ ] Parse frontmatter for meta-data and configs
