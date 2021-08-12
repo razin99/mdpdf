@@ -59,4 +59,6 @@ async function main() {
         .run()
         .catch((error) => { throw error; });
 }
-main().catch(e => console.log(e));
+main()
+    .catch(e => console.log(e))
+    .finally(() => process.exit());
