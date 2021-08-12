@@ -67,7 +67,7 @@ need to insert page break after toc.
 - [ ] Parse frontmatter for meta-data and configs
 - [ ] Use puppeteer and md-toc instead of md-to-pdf (maybe the end result is
   very similar to md-to-pdf, idk)
-- [ ] Use symbol like `<!-- tocstart -->` and `<!-- tocend -->` instead of
+- [x] Use symbol like `<!-- tocstart -->` and `<!-- tocend -->` instead of
   replacing original content in toc. Then you would not need
   `appendBreakPostTOC` anymore.
 

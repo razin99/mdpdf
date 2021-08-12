@@ -31,6 +31,8 @@
     "mdast-builder": "^1.1.1",
     "mdast-util-from-markdown": "^1.0.0",
     "mdast-util-to-markdown": "^1.1.1",
+    "mdast-util-toc": "^6.1.0",
+    "mdast-zone": "^5.1.0",
     "remark": "^14.0.1",
     "remark-toc": "^8.0.0",
     "unist-util-find": "^1.0.2",
