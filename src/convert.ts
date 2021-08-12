@@ -2,10 +2,9 @@ import { mdToPdf } from 'md-to-pdf';
 import { remark } from 'remark';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import remarkToc from 'remark-toc';
+import { addToc } from './addToc.js';
 import fs from 'fs';
 import { PdfConfig } from 'md-to-pdf/dist/lib/config'
-import { addPageBreak } from './appendBreakPostTOC.js'
 
 /**
  * CSS for the markdown
@@ -44,6 +43,7 @@ const configMdToPdf: Partial<PdfConfig> = {
  */
 export async function generatePdf(filePath: string, outFilePath: string) {
   let fileContent: string = "";
+  const basedir: string = dirname(filePath);
 
   try {
     fileContent = fs.readFileSync(filePath, 'utf8');
@@ -52,12 +52,11 @@ export async function generatePdf(filePath: string, outFilePath: string) {
   }
 
   const withToc: string = await remark()
-    .use(remarkToc)
-    .use(addPageBreak)
+    .use(addToc)
     .process(fileContent)
     .then(f => String(f))
 
-  const pdf = await mdToPdf({ content: withToc }, configMdToPdf)
+  const pdf = await mdToPdf({ content: withToc }, { basedir, ...configMdToPdf })
     .catch((e) => {
       console.log(e);
       console.log(`file path provided: ${filePath}`)
