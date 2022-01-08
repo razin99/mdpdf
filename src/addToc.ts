@@ -1,8 +1,8 @@
-import { Root } from 'mdast';
-import { zone, Node } from 'mdast-zone';
-import { list } from 'mdast-builder';
-import { toc, Result } from 'mdast-util-toc';
-import { VFile } from 'vfile';
+import { Root } from "mdast";
+import { zone, Node } from "mdast-zone";
+import { list } from "mdast-builder";
+import { toc, Result } from "mdast-util-toc";
+import { VFile } from "vfile";
 
 interface Options {
   /**
@@ -26,11 +26,11 @@ interface Options {
  * Returns a transformer remark function
  */
 export function addToc(options: Options = {}) {
-  const lookup: string = options.zoneSymbol || 'toc';
+  const lookup: string = options.zoneSymbol || "toc";
 
   let table: Result;
   function transformer(tree: Root, _: VFile) {
-    table = toc(tree, { heading: options.heading || 'toc|table[ -]of[ -]contents?'});
+    table = toc(tree, { heading: options.heading || "toc|table[ -]of[ -]contents?"});
     zone(tree, lookup, mutate);
   }
 
@@ -39,7 +39,7 @@ export function addToc(options: Options = {}) {
       const ordering = table.map.ordered
         ? "ordered"
         : "unordered";
-      return [start, <Node>list(ordering, table.map.children), end]
+      return [start, <Node>list(ordering, table.map.children), end];
     } else {
       return [start, end];
     }

@@ -1,21 +1,26 @@
 #!/usr/bin/env node
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import { generatePdf } from './convert.js';
-import path from 'path';
-import fs from 'fs';
-import Listr, { ListrTask } from 'listr';
-import { exit } from 'process';
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import { generatePdf } from "./convert.js";
+import path from "path";
+import fs from "fs";
+import Listr, { ListrTask } from "listr";
+import { exit } from "process";
 
-const parentMsg = 'Make directories if needed';
-const outdirMsg = 'Output directory';
+const parentMsg = "Make directories if needed";
+const outdirMsg = "Output directory";
 
 const yargsConf = yargs(hideBin(process.argv))
   .options({
-    'outdir': { type: 'string' , demandOption: false,             describe: outdirMsg },
-    'parent': { type: 'boolean', demandOption: false, alias: 'p', describe: parentMsg },
+    outdir: { type: "string", demandOption: false, describe: outdirMsg },
+    parent: {
+      type: "boolean",
+      demandOption: false,
+      alias: "p",
+      describe: parentMsg,
+    },
   })
-  .command('*', 'Markdown file(s) to convert')
+  .command("*", "Markdown file(s) to convert");
 
 const args = yargsConf.parseSync();
 
@@ -24,13 +29,13 @@ if (hideBin(process.argv).length === 0) {
   exit(1);
 }
 
-const outdir = args.outdir || '';
+const outdir = args.outdir || "";
 if (args.outdir && args.parent) {
   // only create directories if parent flag is set
-  !fs.existsSync(args.outdir) && fs.mkdirSync(args.outdir, { recursive: true})
+  !fs.existsSync(args.outdir) && fs.mkdirSync(args.outdir, { recursive: true });
 }
 
-const files = [... new Set(args._)].map(e => e.toString());
+const files = [...new Set(args._)].map((e) => e.toString());
 
 /**
  * Normalize file to include output directory.
@@ -39,7 +44,7 @@ const files = [... new Set(args._)].map(e => e.toString());
  * @returns string of the new file path
  */
 function convToPath(file: string): string {
-  const baseFileName = `${path.basename(file).replace('.md', '')}.pdf`;
+  const baseFileName = `${path.basename(file).replace(".md", "")}.pdf`;
   return path.join(outdir, baseFileName);
 }
 
@@ -52,25 +57,23 @@ function makeListr(file: string): ListrTask {
   const title = `Converting ${path.basename(file)} to pdf`;
   let task;
   if (args.outdir) {
-    task = async () => generatePdf(file, convToPath(file))
+    task = async () => generatePdf(file, convToPath(file));
   } else {
-    task = async () => generatePdf(file, `${file.replace('.md', '')}.pdf`)
+    task = async () => generatePdf(file, `${file.replace(".md", "")}.pdf`);
   }
   return { title, task };
 }
 
 async function main() {
-  await new Listr(
-    files.map(makeListr),
-    {
-      concurrent: true,
-      exitOnError: false
-    }
-  )
+  await new Listr(files.map(makeListr), {
+    concurrent: true,
+    exitOnError: false,
+  })
     .run()
-    .catch((error: Error) => { throw error });
+    .catch((error: Error) => {
+      throw error;
+    });
 }
 main()
-  .catch(e => console.log(e))
+  .catch((e) => console.log(e))
   .finally(() => process.exit());
-
